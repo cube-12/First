@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${book.id == null} ? '添加图书' : '编辑图书'">图书表单</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(120deg, #e8ecf2 0%, #dde3ed 40%, #e1e5ee 100%);
+            font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", "Roboto", sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .frosted-card {
+            background: rgba(255,255,255,0.96);
+            padding: 44px 34px 34px 34px;
+            border-radius: 26px;
+            box-shadow: 0 12px 48px 0 rgba(49,94,212,0.13), 0 1.5px 12px 0 #d1d8ec88;
+            max-width: 410px;
+            width: 100%;
+            margin: 40px auto;
+            backdrop-filter: blur(6px);
+            border: 1.5px solid #e6eaf3;
+            text-align: center;
+            animation: cardIn 0.7s cubic-bezier(.68,-0.55,.27,1.55);
+        }
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(60px) scale(.95);}
+            to   { opacity: 1; transform: none;}
+        }
+        .form-title {
+            font-size: 2rem;
+            color: #273a55;
+            font-weight: 900;
+            margin-bottom: 18px;
+            letter-spacing: 1.5px;
+            text-shadow: 0 6px 18px #b4c9e4cc;
+        }
+        .form-label {
+            font-size: 1rem;
+            color: #4b5b75;
+            display: block;
+            margin-bottom: 7px;
+            margin-top: 18px;
+            text-align: left;
+        }
+        .form-input {
+            width: 100%;
+            padding: 12px 10px;
+            border-radius: 8px;
+            border: 1.5px solid #d3e1f7;
+            font-size: 1rem;
+            outline: none;
+            margin-bottom: 2px;
+            background: #f7fafc;
+            transition: border 0.2s;
+        }
+        .form-input:focus {
+            border-color: #5a6cae;
+        }
+        .form-btn {
+            width: 100%;
+            display: block;
+            background: linear-gradient(90deg, #5563a0 55%, #7ba3db 100%);
+            color: #fff;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 11px;
+            padding: 13px 0;
+            margin-top: 28px;
+            box-shadow: 0 2px 12px #b3c2df44;
+            cursor: pointer;
+            transition: box-shadow 0.18s, transform 0.11s, background 0.18s, color 0.18s;
+        }
+        .form-btn:hover {
+            background: linear-gradient(92deg,#313e6d 60%,#95b5e8 100%);
+            color: #fff;
+            transform: translateY(-2px) scale(1.045);
+            box-shadow: 0 6px 18px #a0c0f0b0;
+        }
+        .form-link {
+            display: block;
+            text-align: right;
+            margin-top: 10px;
+            color: #41507c;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            opacity: 0.75;
+        }
+        .form-link:hover {
+            text-decoration: underline;
+            opacity: 1;
+        }
+        @media (max-width: 600px) {
+            .frosted-card { padding: 18px 4vw 10px 4vw; max-width: 99vw;}
+            .form-title { font-size: 1.16rem; }
+            .form-label { font-size: .98rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="frosted-card">
+    <div class="form-title" th:text="${book.id == null} ? '添加图书' : '编辑图书'">图书表单</div>
+    <form th:action="@{/books/add}" method="post" th:if="${book.id} == null">
+        <label class="form-label" for="title">书名</label>
+        <input class="form-input" type="text" id="title" name="title" th:value="${book.title}" required />
+        <label class="form-label" for="author">作者</label>
+        <input class="form-input" type="text" id="author" name="author" th:value="${book.author}" required />
+        <label class="form-label" for="publisher">出版社</label>
+        <input class="form-input" type="text" id="publisher" name="publisher" th:value="${book.publisher}" required />
+        <label class="form-label" for="stock">库存</label>
+        <input class="form-input" type="number" id="stock" name="stock" th:value="${book.stock}" min="0" required />
+        <button class="form-btn" type="submit">添加</button>
+        <a class="form-link" th:href="@{/books}">返回列表</a>
+    </form>
+    <form th:action="@{/books/edit/{id}(id=${book.id})}" method="post" th:if="${book.id} != null">
+        <label class="form-label" for="title">书名</label>
+        <input class="form-input" type="text" id="title" name="title" th:value="${book.title}" required />
+        <label class="form-label" for="author">作者</label>
+        <input class="form-input" type="text" id="author" name="author" th:value="${book.author}" required />
+        <label class="form-label" for="publisher">出版社</label>
+        <input class="form-input" type="text" id="publisher" name="publisher" th:value="${book.publisher}" required />
+        <label class="form-label" for="stock">库存</label>
+        <input class="form-input" type="number" id="stock" name="stock" th:value="${book.stock}" min="0" required />
+        <button class="form-btn" type="submit">保存</button>
+        <a class="form-link" th:href="@{/books}">返回列表</a>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>注册 - 图书管理系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(120deg, #e8ecf2 0%, #dde3ed 40%, #e1e5ee 100%);
+            font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", "Roboto", sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .frosted-card {
+            background: rgba(255,255,255,0.96);
+            padding: 56px 38px 38px 38px;
+            border-radius: 26px;
+            box-shadow: 0 12px 48px 0 rgba(49,94,212,0.13), 0 1.5px 12px 0 #d1d8ec88;
+            max-width: 400px;
+            width: 100%;
+            margin: 0 auto;
+            backdrop-filter: blur(6px);
+            border: 1.5px solid #e6eaf3;
+            text-align: center;
+        }
+        .form-title {
+            font-size: 2rem;
+            color: #273a55;
+            font-weight: 800;
+            margin-bottom: 18px;
+            letter-spacing: 1.4px;
+        }
+        .form-label {
+            font-size: 1rem;
+            color: #4b5b75;
+            display: block;
+            margin-bottom: 7px;
+            margin-top: 18px;
+            text-align: left;
+        }
+        .form-input {
+            width: 100%;
+            padding: 12px 10px;
+            border-radius: 6px;
+            border: 1px solid #d3e1f7;
+            font-size: 1rem;
+            outline: none;
+            margin-bottom: 2px;
+            background: #f7fafc;
+            transition: border 0.2s;
+        }
+        .form-input:focus {
+            border-color: #5a6cae;
+        }
+        .form-btn {
+            width: 100%;
+            display: block;
+            background: linear-gradient(90deg, #c0d3e9 0%, #a3b9db 100%);
+            color: #41507c;
+            font-size: 1.13rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            padding: 13px 0;
+            margin-top: 28px;
+            box-shadow: 0 2px 12px #b3c2df36;
+            cursor: pointer;
+            transition: box-shadow 0.18s, transform 0.11s, background 0.18s, color 0.18s;
+            border: 1px solid #bfcbe1;
+        }
+        .form-btn:hover {
+            background: linear-gradient(93deg, #f6f7fa 0%, #c2d2ec 100%);
+            color: #2f3d5b;
+            transform: translateY(-2px) scale(1.045);
+        }
+        .form-link {
+            display: block;
+            text-align: right;
+            margin-top: 10px;
+            color: #41507c;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            opacity: 0.75;
+        }
+        .form-link:hover {
+            text-decoration: underline;
+            opacity: 1;
+        }
+        .form-error {
+            color: #d32f2f;
+            margin-top: 18px;
+            margin-bottom: -8px;
+            text-align: center;
+            font-size: 1.05rem;
+            font-weight: bold;
+            background: #ffeaea;
+            border-radius: 6px;
+            padding: 8px 0;
+            letter-spacing: 1px;
+            border: 1.2px solid #fbb;
+        }
+        @media (max-width: 600px) {
+            .frosted-card { padding: 18px 4vw 10px 4vw; max-width: 99vw;}
+            .form-title { font-size: 1.16rem; }
+            .form-label { font-size: .98rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="frosted-card">
+    <div class="form-title">用户注册</div>
+    <form th:action="@{/register}" method="post">
+        <label class="form-label" for="username">用户名</label>
+        <input class="form-input" type="text" id="username" name="username" required autocomplete="username"/>
+
+        <label class="form-label" for="password">密码</label>
+        <input class="form-input" type="password" id="password" name="password" required autocomplete="new-password"/>
+
+        <label class="form-label" for="confirmPassword">确认密码</label>
+        <input class="form-input" type="password" id="confirmPassword" name="confirmPassword" required autocomplete="new-password"/>
+
+        <button class="form-btn" type="submit">注册</button>
+        <a class="form-link" th:href="@{/login}">已有账号？去登录</a>
+        <div class="form-error" th:if="${param.error}">
+            注册失败，请检查信息
+        </div>
+    </form>
+</div>
+</body>
+</html>

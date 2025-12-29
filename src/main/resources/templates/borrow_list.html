@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>借阅管理</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="main-bg">
+    <div class="top-bar">
+        <div class="logo">📚 图书管理系统</div>
+        <div class="nav-links">
+            <a th:href="@{/books}" class="nav-btn">图书管理</a>
+            <a th:href="@{/logout}" class="nav-btn logout-btn">退出登录</a>
+        </div>
+    </div>
+    <div class="content-card">
+        <h2 class="title">借阅记录</h2>
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>用户名</th>
+                    <th>书名</th>
+                    <th>借阅时间</th>
+                    <th>归还时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr th:each="record : ${records}">
+                <td th:text="${record.user.username}"></td>
+                <td th:text="${record.book.title}"></td>
+                <td th:text="${#temporals.format(record.borrowTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${record.returnTime != null ? #temporals.format(record.returnTime, 'yyyy-MM-dd HH:mm:ss') : '未归还'}"></td>
+                <td>
+                    <span th:if="${record.returnTime == null}">
+                        <a th:href="@{|/borrow/return/${record.id}|}" class="table-btn success-btn">归还</a>
+                    </span>
+                    <span th:unless="${record.returnTime == null}">
+                        <span class="done-txt">已归还</span>
+                    </span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
