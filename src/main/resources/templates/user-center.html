@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>个人中心 - 图书馆管理系统</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>
+:root{--primary:#1a237e;--primary-light:#283593;--primary-dark:#0d1b5e;--accent:#ff6f00;--bg:#f0f2f5;--card-shadow:0 2px 8px rgba(0,0,0,0.06);--radius:10px}
+*{box-sizing:border-box}body{background:var(--bg);font-family:"Segoe UI",system-ui,sans-serif;min-height:100vh;margin:0;padding:0;display:flex}
+.sidebar{width:240px;min-height:100vh;background:linear-gradient(180deg,#1a237e,#0d1b5e);color:#fff;position:fixed;left:0;top:0;display:flex;flex-direction:column;box-shadow:2px 0 12px rgba(0,0,0,0.15);z-index:1000}
+.sidebar-brand{padding:20px;font-size:1.1rem;font-weight:700;border-bottom:1px solid rgba(255,255,255,0.1);text-align:center}
+.sidebar-brand i{font-size:1.5rem;display:block;margin-bottom:6px}
+.sidebar-nav{flex:1;padding:12px 0;overflow-y:auto}
+.sidebar-nav .nav-section{padding:8px 20px 4px;font-size:0.75rem;text-transform:uppercase;opacity:0.5;letter-spacing:1px}
+.sidebar-nav a{display:flex;align-items:center;padding:10px 20px;color:rgba(255,255,255,0.75);text-decoration:none;transition:all .2s;font-size:0.92rem}
+.sidebar-nav a:hover{background:rgba(255,255,255,0.1);color:#fff}
+.sidebar-nav a.active{background:rgba(255,255,255,0.15);color:#fff;border-right:3px solid var(--accent)}
+.sidebar-nav a i{width:22px;margin-right:10px;text-align:center;font-size:1rem}
+.sidebar-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,0.1);font-size:0.85rem}
+.main-content{margin-left:240px;flex:1;min-height:100vh;padding:24px 28px;width:calc(100% - 240px)}
+.page-title{margin-bottom:24px}.page-title h1{font-weight:700;color:var(--primary);margin:0;font-size:1.6rem}.page-title p{color:#666;margin:4px 0 0}
+.card-custom{background:#fff;border:none;border-radius:var(--radius);box-shadow:var(--card-shadow)}
+.table-custom{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--card-shadow)}
+.table-custom thead{background:var(--primary);color:#fff}.table-custom th{font-weight:600;padding:12px 16px;border:none;font-size:0.9rem}.table-custom td{padding:12px 16px;vertical-align:middle}
+.badge-available{background:#e8f5e9;color:#2e7d32;padding:4px 12px;border-radius:20px;font-weight:600;font-size:0.8rem}
+.badge-unavailable{background:#ffebee;color:#c62828;padding:4px 12px;border-radius:20px;font-weight:600;font-size:0.8rem}
+.badge-admin{background:#fff3e0;color:#e65100;padding:4px 12px;border-radius:20px;font-weight:600;font-size:0.8rem}
+.badge-user{background:#e3f2fd;color:#1565c0;padding:4px 12px;border-radius:20px;font-weight:600;font-size:0.8rem}
+.badge-pending{background:#fff8e1;color:#f57f17;padding:4px 12px;border-radius:20px;font-weight:600;font-size:0.8rem}
+.badge-approved{background:#e8f5e9;color:#2e7d32;padding:4px 12px;border-radius:20px;font-weight:600;font-size:0.8rem}
+.badge-rejected{background:#ffebee;color:#c62828;padding:4px 12px;border-radius:20px;font-weight:600;font-size:0.8rem}
+.btn-action{padding:4px 12px;font-size:0.82rem;border-radius:6px;margin:0 2px}
+.sidebar-card{background:#fff;border-radius:var(--radius);box-shadow:var(--card-shadow);padding:16px;margin-bottom:16px}
+.sidebar-card h6{color:var(--primary);font-weight:700;border-bottom:2px solid var(--primary);padding-bottom:8px;margin-bottom:12px;font-size:0.9rem}
+</style></head><body><div class="sidebar">
+<div class="sidebar-brand"><i class="fas fa-book-open"></i><span>图书馆管理系统</span></div>
+<div class="sidebar-nav">
+<div class="nav-section">导航</div>
+<a href="/" th:classappend="${currentPage} == 'home' ? 'active'"><i class="fas fa-home"></i><span>首页</span></a>
+<div class="nav-section">图书服务</div>
+<a href="/books" th:classappend="${currentPage} == 'books' ? 'active'"><i class="fas fa-search"></i><span>图书检索</span></a>
+<a href="/books/recommend" th:classappend="${currentPage} == 'recommend' ? 'active'"><i class="fas fa-plus-circle"></i><span>读者荐购</span></a>
+<a href="/books/my-recommendations" th:classappend="${currentPage} == 'myrec' ? 'active'"><i class="fas fa-list"></i><span>荐购记录</span></a>
+<div class="nav-section">个人</div>
+<a href="/user/center" th:classappend="${currentPage} == 'center' ? 'active'"><i class="fas fa-user-circle"></i><span>个人中心</span></a>
+</div>
+<div class="sidebar-footer" th:if="${username != null}">
+<div style="display:flex;align-items:center;justify-content:space-between">
+<span><i class="fas fa-user me-1"></i><span th:text="${username}">用户</span></span>
+<form th:action="@{/logout}" method="post" class="m-0"><button type="submit" class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:#fff;border:none;border-radius:6px"><i class="fas fa-sign-out-alt"></i></button></form>
+</div></div></div><div class="main-content"><div class="page-title"><h1><i class="fas fa-user-circle me-2"></i>个人中心</h1></div>
+<div class="row"><div class="col-md-4">
+<div class="card-custom p-3 text-center mb-3"><i class="fas fa-user-circle" style="font-size:4rem;color:var(--primary)"></i><h4 class="mt-2" id="userFullName">用户姓名</h4><p class="text-muted mb-0" id="userEmail">user@example.com</p></div>
+<div class="row"><div class="col-6 mb-2"><div class="card-custom p-3 text-center"><h3 class="mb-0" id="totalBooks">0</h3><small class="text-muted">借阅总数</small></div></div><div class="col-6 mb-2"><div class="card-custom p-3 text-center"><h3 class="mb-0 text-success" id="returnedBooks">0</h3><small class="text-muted">已归还</small></div></div><div class="col-6"><div class="card-custom p-3 text-center"><h3 class="mb-0 text-warning" id="borrowingBooks">0</h3><small class="text-muted">借阅中</small></div></div><div class="col-6"><div class="card-custom p-3 text-center"><h3 class="mb-0 text-danger" id="overdueBooks">0</h3><small class="text-muted">逾期</small></div></div></div>
+</div><div class="col-md-8">
+<ul class="nav nav-tabs mb-3"><li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile"><i class="fas fa-user me-1"></i>个人信息</button></li><li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#security"><i class="fas fa-shield-alt me-1"></i>安全设置</button></li><li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#history"><i class="fas fa-history me-1"></i>借阅历史</button></li></ul>
+<div class="tab-content">
+<div class="tab-pane fade show active" id="profile"><div class="card-custom p-3">
+<h5>编辑个人信息</h5>
+<form id="updateProfileForm"><div class="row"><div class="col-md-6 mb-3"><label class="form-label fw-bold">名字</label><input type="text" class="form-control" id="firstName" required></div><div class="col-md-6 mb-3"><label class="form-label fw-bold">姓氏</label><input type="text" class="form-control" id="lastName" required></div></div><div class="mb-3"><label class="form-label fw-bold">邮箱</label><input type="email" class="form-control" id="email" required></div><div class="mb-3"><label class="form-label fw-bold">用户名</label><input type="text" class="form-control" id="username" required></div><button type="submit" class="btn" style="background:var(--accent);color:#fff;border:none"><i class="fas fa-save me-1"></i>保存</button></form>
+</div></div>
+<div class="tab-pane fade" id="security">
+<div class="card-custom p-3 mb-3"><h5>修改密码</h5>
+<form id="changePasswordForm"><div class="mb-3"><label class="form-label fw-bold">当前密码</label><input type="password" class="form-control" id="currentPassword" required></div><div class="mb-3"><label class="form-label fw-bold">新密码</label><input type="password" class="form-control" id="newPassword" required></div><div class="mb-3"><label class="form-label fw-bold">确认新密码</label><input type="password" class="form-control" id="confirmPassword" required></div><button type="submit" class="btn" style="background:var(--accent);color:#fff;border:none"><i class="fas fa-key me-1"></i>修改密码</button></form>
+</div>
+<div class="card-custom p-3 border-danger"><h5 class="text-danger"><i class="fas fa-trash me-2"></i>危险操作</h5><p class="text-muted">删除账户将永久移除所有数据，不可撤销。</p><button class="btn btn-outline-danger" id="deleteAccountBtn"><i class="fas fa-trash me-1"></i>删除账户</button></div>
+</div>
+<div class="tab-pane fade" id="history">
+<div class="d-flex justify-content-between align-items-center mb-3"><h5>借阅记录</h5><div class="d-flex gap-2"><select class="form-select" id="filterStatus" style="width:130px"><option value="all">全部</option><option value="BORROWED">借阅中</option><option value="RETURNED">已归还</option><option value="OVERDUE">逾期</option></select><input type="text" class="form-control" id="searchHistory" placeholder="搜索..." style="width:150px"><button class="btn btn-primary btn-sm" id="refreshHistory"><i class="fas fa-sync-alt"></i></button></div></div>
+<div id="historyList"><div class="text-center py-4"><div class="spinner-border text-primary"></div><p class="mt-2">加载中...</p></div></div>
+</div></div></div></div>
+<div class="modal fade" id="deleteAccountModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-danger text-white"><h5 class="modal-title"><i class="fas fa-exclamation-triangle me-2"></i>确认删除</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><p>此操作不可撤销！</p><div class="mb-3"><label class="form-label fw-bold">输入密码确认：</label><input type="password" class="form-control" id="confirmDeletePassword" required></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button><button type="button" class="btn btn-danger" id="confirmDeleteBtn">永久删除</button></div></div></div></div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+let u=null;
+const $=id=>document.getElementById(id);
+function fetchUser(){axios.get("/api/user/current").then(r=>{u=r.data;$("userFullName").textContent=u.firstName+" "+u.lastName;$("userEmail").textContent=u.email;$("firstName").value=u.firstName||"";$("lastName").value=u.lastName||"";$("email").value=u.email||"";$("username").value=u.username||"";}).catch(()=>{})}
+function fetchStats(){axios.get("/api/user/borrow-stats").then(r=>{let s=r.data;$("totalBooks").textContent=s.totalBorrowed;$("returnedBooks").textContent=s.returned;$("borrowingBooks").textContent=s.borrowing;$("overdueBooks").textContent=s.overdue;}).catch(()=>{})}
+function fetchHistory(){let s=$("filterStatus").value,q=$("searchHistory").value;let l=$("historyList");l.innerHTML="<div class='text-center py-3'><div class='spinner-border text-primary'></div></div>";axios.get("/api/user/borrow-history?status="+s+"&search="+q).then(r=>{let d=r.data;if(!d.length){l.innerHTML="<div class='text-center py-5 text-muted'><i class='fas fa-book-open' style='font-size:3rem'></i><h5 class='mt-3'>暂无借阅记录</h5></div>";return}let h="";d.forEach(i=>{let b=i.status==="RETURNED"?"<span class='badge-available'>已归还</span>":i.status==="OVERDUE"?"<span class='badge-unavailable'>逾期</span>":"<span class='badge-user'>借阅中</span>";h+="<div class='border-start border-primary mb-2 p-3' style='background:#fafafa;border-radius:6px'><div class='d-flex justify-content-between'><h6 class='mb-1'>"+i.bookTitle+"</h6>"+b+"</div><small class='text-muted'>作者: "+i.bookAuthor+" | 借阅: "+new Date(i.borrowDate).toLocaleDateString()+" | 应还: "+new Date(i.dueDate).toLocaleDateString()+"</small></div>"});l.innerHTML=h;}).catch(()=>{l.innerHTML="<div class='alert alert-danger'>加载失败</div>";});}
+$("updateProfileForm").addEventListener("submit",function(e){e.preventDefault();axios.put("/api/user/profile",{firstName:$("firstName").value,lastName:$("lastName").value,email:$("email").value,username:$("username").value}).then(()=>{alert("保存成功");fetchUser();}).catch(e=>{alert("保存失败: "+(e.response?.data?.message||"请重试"));});});
+$("changePasswordForm").addEventListener("submit",function(e){e.preventDefault();var c=$("currentPassword").value,n=$("newPassword").value,f=$("confirmPassword").value;if(n!==f){alert("新密码不一致");return}if(n.length<8){alert("密码至少8个字符");return}axios.put("/api/user/password",{currentPassword:c,newPassword:n}).then(()=>{alert("密码修改成功");$("changePasswordForm").reset();}).catch(e=>{alert("修改失败: "+(e.response?.data?.message||"请重试"));});});
+$("deleteAccountBtn").addEventListener("click",function(){new bootstrap.Modal($("deleteAccountModal")).show();});
+$("confirmDeleteBtn").addEventListener("click",function(){var p=$("confirmDeletePassword").value;if(!p){alert("请输入密码");return}axios.delete("/api/user/account",{data:{password:p}}).then(()=>{alert("账户已删除");window.location.href="/user/login";}).catch(e=>{alert("删除失败: "+(e.response?.data?.message||"请重试"));});});
+$("refreshHistory").addEventListener("click",fetchHistory);$("filterStatus").addEventListener("change",fetchHistory);$("searchHistory").addEventListener("input",fetchHistory);
+fetchUser();fetchStats();fetchHistory();
+});
+</script><footer style="margin-top:40px;padding:16px 0;text-align:center;color:#999;font-size:0.85rem;border-top:1px solid #e0e0e0"><p class="mb-0">&copy; 2026 图书馆管理系统</p></footer></div><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script></body></html>

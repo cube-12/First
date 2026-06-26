@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>管理员 - 荐购管理</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>
+:root{--primary:#1a237e;--primary-light:#283593;--primary-dark:#0d1b5e;--accent:#ff6f00;--bg:#f0f2f5;--card-shadow:0 2px 8px rgba(0,0,0,0.06);--radius:10px}
+*{box-sizing:border-box}body{background:var(--bg);font-family:"Segoe UI",system-ui,sans-serif;min-height:100vh;margin:0;padding:0;display:flex}
+.sidebar{width:240px;min-height:100vh;background:linear-gradient(180deg,#1a237e,#0d1b5e);color:#fff;position:fixed;left:0;top:0;display:flex;flex-direction:column;box-shadow:2px 0 12px rgba(0,0,0,0.15);z-index:1000}
+.sidebar-brand{padding:20px;font-size:1.1rem;font-weight:700;border-bottom:1px solid rgba(255,255,255,0.1);text-align:center}
+.sidebar-brand i{font-size:1.5rem;display:block;margin-bottom:6px}
+.sidebar-nav{flex:1;padding:12px 0;overflow-y:auto}
+.sidebar-nav .nav-section{padding:8px 20px 4px;font-size:0.75rem;text-transform:uppercase;opacity:0.5;letter-spacing:1px}
+.sidebar-nav a{display:flex;align-items:center;padding:10px 20px;color:rgba(255,255,255,0.75);text-decoration:none;transition:all .2s;font-size:0.92rem}
+.sidebar-nav a:hover{background:rgba(255,255,255,0.1);color:#fff}
+.sidebar-nav a.active{background:rgba(255,255,255,0.15);color:#fff;border-right:3px solid var(--accent)}
+.sidebar-nav a i{width:22px;margin-right:10px;text-align:center;font-size:1rem}
+.sidebar-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,0.1);font-size:0.85rem}
+.main-content{margin-left:240px;flex:1;min-height:100vh;padding:24px 28px;width:calc(100% - 240px)}
+.page-title{margin-bottom:24px}.page-title h1{font-weight:700;color:var(--primary);margin:0;font-size:1.6rem}.page-title p{color:#666;margin:4px 0 0}
+.card-custom{background:#fff;border:none;border-radius:var(--radius);box-shadow:var(--card-shadow)}
+.table-custom{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--card-shadow)}
+.table-custom thead{background:var(--primary);color:#fff}.table-custom th{font-weight:600;padding:12px 16px;border:none;font-size:0.9rem}.table-custom td{padding:12px 16px;vertical-align:middle}
+.badge-available{background:#e8f5e9;color:#2e7d32;padding:4px 12px;border-radius:20px;font-weight:600;font-size:0.8rem}
+.badge-unavailable{background:#ffebee;color:#c62828;padding:4px 12px;border-radius:20px;font-weight:600;font-size:0.8rem}
+.badge-admin{background:#fff3e0;color:#e65100;padding:4px 12px;border-radius:20px;font-weight:600;font-size:0.8rem}
+.badge-user{background:#e3f2fd;color:#1565c0;padding:4px 12px;border-radius:20px;font-weight:600;font-size:0.8rem}
+.badge-pending{background:#fff8e1;color:#f57f17;padding:4px 12px;border-radius:20px;font-weight:600;font-size:0.8rem}
+.badge-approved{background:#e8f5e9;color:#2e7d32;padding:4px 12px;border-radius:20px;font-weight:600;font-size:0.8rem}
+.badge-rejected{background:#ffebee;color:#c62828;padding:4px 12px;border-radius:20px;font-weight:600;font-size:0.8rem}
+.btn-action{padding:4px 12px;font-size:0.82rem;border-radius:6px;margin:0 2px}
+.sidebar-card{background:#fff;border-radius:var(--radius);box-shadow:var(--card-shadow);padding:16px;margin-bottom:16px}
+.sidebar-card h6{color:var(--primary);font-weight:700;border-bottom:2px solid var(--primary);padding-bottom:8px;margin-bottom:12px;font-size:0.9rem}
+</style></head><body><div class="sidebar">
+<div class="sidebar-brand"><i class="fas fa-book-open"></i><span>图书馆管理系统</span></div>
+<div class="sidebar-nav">
+<div class="nav-section">导航</div>
+<a href="/" th:classappend="${currentPage} == 'home' ? 'active'"><i class="fas fa-home"></i><span>首页</span></a>
+<div class="nav-section"><div class="nav-section">图书管理</div><a href="/admin/books" th:classappend="${currentPage} == 'admin-books' ? 'active'"><i class="fas fa-book"></i><span>图书列表</span></a><a href="/admin/books/add" th:classappend="${currentPage} == 'admin-addbook' ? 'active'"><i class="fas fa-plus"></i><span>添加图书</span></a><div class="nav-section">系统管理</div><a href="/admin/users" th:classappend="${currentPage} == 'admin-users' ? 'active'"><i class="fas fa-users-cog"></i><span>用户管理</span></a><a href="/admin/recommendations" th:classappend="${currentPage} == 'admin-recs' ? 'active'"><i class="fas fa-shopping-cart"></i><span>荐购管理</span></a></div>
+<a href="/books" th:classappend="${currentPage} == 'books' ? 'active'"><i class="fas fa-search"></i><span>图书检索</span></a>
+<a href="/books/recommend" th:classappend="${currentPage} == 'recommend' ? 'active'"><i class="fas fa-plus-circle"></i><span>读者荐购</span></a>
+<a href="/books/my-recommendations" th:classappend="${currentPage} == 'myrec' ? 'active'"><i class="fas fa-list"></i><span>荐购记录</span></a>
+<div class="nav-section">个人</div>
+<a href="/user/center" th:classappend="${currentPage} == 'center' ? 'active'"><i class="fas fa-user-circle"></i><span>个人中心</span></a>
+</div>
+<div class="sidebar-footer" th:if="${username != null}">
+<div style="display:flex;align-items:center;justify-content:space-between">
+<span><i class="fas fa-user me-1"></i><span th:text="${username}">用户</span></span>
+<form th:action="@{/logout}" method="post" class="m-0"><button type="submit" class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:#fff;border:none;border-radius:6px"><i class="fas fa-sign-out-alt"></i></button></form>
+</div></div></div><div class="main-content"><div class="page-title"><h1><i class="fas fa-shopping-cart me-2"></i>荐购管理</h1><p>待处理: <span class="badge bg-warning text-dark" th:text="${pendingCount}">0</span></p></div>
+<div class="table-responsive table-custom">
+<table class="table table-hover mb-0"><thead><tr><th>书名</th><th>作者</th><th>ISBN</th><th>推荐人</th><th>理由</th><th>时间</th><th>状态</th><th>操作</th></tr></thead>
+<tbody><tr th:each="r : ${recommendations}">
+<td th:text="${r.bookTitle}">书名</td><td th:text="${r.author}">作者</td><td><code th:text="${r.isbn}">ISBN</code></td><td th:text="${r.userName}">用户</td><td th:text="${r.reason}" style="max-width:150px;overflow:hidden;text-overflow:ellipsis">理由</td><td th:text="${r.createdAt}">日期</td>
+<td><span th:if="${r.status=='PENDING'}" class="badge-pending">待处理</span><span th:if="${r.status=='APPROVED'}" class="badge-approved">已采纳</span><span th:if="${r.status=='REJECTED'}" class="badge-rejected">已拒绝</span></td>
+<td>
+<form th:action="@{/admin/recommendations/process}" method="post" class="d-flex gap-1" th:if="${r.status=='PENDING'}">
+<input type="hidden" name="id" th:value="${r.id}"><input type="text" name="adminReply" class="form-control form-control-sm" placeholder="回复" style="width:100px">
+<button type="submit" name="status" value="APPROVED" class="btn btn-sm btn-success btn-action"><i class="fas fa-check"></i></button>
+<button type="submit" name="status" value="REJECTED" class="btn btn-sm btn-danger btn-action"><i class="fas fa-times"></i></button>
+</form>
+<span th:if="${r.status!='PENDING'}" class="text-muted" th:text="${r.adminReply?:'已处理'}">回复</span>
+</td>
+</tr></tbody></table></div><footer style="margin-top:40px;padding:16px 0;text-align:center;color:#999;font-size:0.85rem;border-top:1px solid #e0e0e0"><p class="mb-0">&copy; 2026 图书馆管理系统</p></footer></div><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script></body></html>
